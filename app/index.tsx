@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import Home from './home';
 import TodoType from '@/types/Todo';
+import Add from './add';
 
 const Index = () => {
     const [todos, setTodos] = useState<TodoType[]>([]);
@@ -15,7 +16,8 @@ const Index = () => {
             .catch((error) => console.log(error));
     }, []);
 
-    return <Home todos={todos} />;
+    // return <Home todos={todos} />;
+    return <Add />;
 };
 
 export default Index;

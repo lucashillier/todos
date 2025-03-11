@@ -1,3 +1,4 @@
+import { COLORS } from '@/assets/colors';
 import TodoType from '@/types/Todo';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -24,15 +25,15 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         flexDirection: 'row',
         gap: 8,
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.white,
         alignItems: 'center'
     },
     checkbox: {
         width: 24,
         height: 24,
         borderRadius: 60,
-        backgroundColor: '#FFF',
-        borderColor: '#2596be',
+        backgroundColor: COLORS.white,
+        borderColor: COLORS.primary,
         borderWidth: 3
     },
     todoText: {}
