@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import Todo from '@/components/todo';
 import TodoType from '@/types/Todo';
+import { COLORS } from '@/assets/colors';
 
 type Props = {
     todos: TodoType[];
@@ -16,8 +17,8 @@ const Home = (props: Props) => {
 
             {/* Todo container */}
             <View style={styles.todoWrapper}>
-                {props.todos.map((aTodo, index) => (
-                    <Todo key={index} aTodo={aTodo} />
+                {props.todos.map((aTodo) => (
+                    <Todo key={aTodo.id} aTodo={aTodo} />
                 ))}
             </View>
         </View>
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: '#ededed',
+        backgroundColor: COLORS.background,
         alignItems: 'flex-start'
     },
     todoWrapper: {
