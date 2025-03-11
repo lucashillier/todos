@@ -1,4 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useContext } from 'react';
+
+import { TodoContext } from './index';
 
 import Todo from '@/components/todo';
 import TodoType from '@/types/Todo';
@@ -8,7 +11,9 @@ type Props = {
     todos: TodoType[];
 };
 
-const Home = (props: Props) => {
+const Home = () => {
+    const todos = useContext(TodoContext);
+
     return (
         // Wrapper
         <View style={styles.container}>
@@ -17,7 +22,7 @@ const Home = (props: Props) => {
 
             {/* Todo container */}
             <View style={styles.todoWrapper}>
-                {props.todos.map((aTodo) => (
+                {todos.map((aTodo) => (
                     <Todo key={aTodo.id} aTodo={aTodo} />
                 ))}
             </View>
