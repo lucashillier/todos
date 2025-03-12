@@ -19,7 +19,12 @@ const Todo = (props: Props) => {
     <TouchableHighlight style={styles.container} onPress={props.onPress}>
       <View style={styles.container}>
         {/* Checkmark */}
-        <View style={styles.checkbox}></View>
+        <View
+          style={[
+            styles.checkbox,
+            props.aTodo.completed ? styles.completed : null
+          ]}
+        ></View>
 
         {/* Title */}
         <Text style={styles.todoText}>{props.aTodo.title}</Text>
@@ -44,6 +49,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderColor: COLORS.primary,
     borderWidth: 3
+  },
+  completed: {
+    backgroundColor: COLORS.primary
   },
   todoText: {}
 });
