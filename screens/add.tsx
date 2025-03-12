@@ -33,13 +33,15 @@ const Add = () => {
           placeholder="Title"
           placeholderTextColor={COLORS.border}
         />
-        <Button
-          onPress={() => navigation.popTo('Home', { title })}
-          disabled={title === ''}
-          title="Add"
-          color={COLORS.primary}
-          accessibilityLabel="Add To-Do"
-        />
+        <View style={styles.buttonWrapper}>
+          <Button
+            onPress={() => navigation.popTo('Home', { title })}
+            disabled={title === ''}
+            title="Add"
+            color={COLORS.primary}
+            accessibilityLabel="Add To-Do"
+          />
+        </View>
       </KeyboardAvoidingView>
     </View>
   );
@@ -59,7 +61,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
-    gap: 20
+    gap: 20,
+    minWidth: '100%'
   },
   title: {
     fontSize: 24,
@@ -70,7 +73,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 10,
     borderColor: COLORS.border,
-    borderWidth: 1
+    borderWidth: 1,
+    minWidth: '100%'
+  },
+  buttonWrapper: {
+    alignSelf: 'flex-end'
   }
 });
 
