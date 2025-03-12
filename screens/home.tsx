@@ -49,6 +49,17 @@ const Home = ({ route }: Props) => {
     }
   }, [route.params?.title]);
 
+  // Delete the todo from params if present
+  useEffect(() => {
+    const deleteID = route.params?.deleteID;
+
+    if (deleteID) {
+      setTodos(todos.filter((aTodo) => aTodo.id !== deleteID));
+
+      navigation.setParams({ deleteID: undefined });
+    }
+  }, [route.params?.deleteID]);
+
   return (
     // Wrapper
     <View style={styles.container}>
@@ -57,14 +68,14 @@ const Home = ({ route }: Props) => {
       {/* Todo container */}
       <View style={styles.todoWrapper}>
         {todos.map((aTodo) => (
-          <Todo key={aTodo.id} aTodo={aTodo} />
+          <Todo key={aTodo.id} aTodo={aTodo} onPress={() => {}} />
         ))}
       </View>
 
       {/* Button wrapper */}
       <View style={styles.buttonWrapper}>
         <Button
-          onPress={() => navigation.navigate('Add')}
+          onPress={() => navigation.navigate('Delete', { todos })}
           title="Delete To-Do"
           color={COLORS.primary}
           accessibilityLabel="Add To-Do"
