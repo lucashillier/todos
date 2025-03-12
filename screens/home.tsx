@@ -13,6 +13,17 @@ type homeScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 let todoID = 0;
 
+// Toggles the todo with the given id and returns the updated array
+const toggleTodo = (todos: TodoType[], id: number) => {
+  return todos.map((aTodo) => {
+    if (aTodo.id === id) {
+      aTodo.completed = !aTodo.completed;
+    }
+
+    return aTodo;
+  });
+};
+
 const Home = ({ route }: Props) => {
   const [todos, setTodos] = useState<TodoType[]>([]);
 
@@ -43,8 +54,8 @@ const Home = ({ route }: Props) => {
         completed: false
       };
 
+      // Update the state and clear the param
       setTodos([...todos, newTodo]);
-
       navigation.setParams({ title: undefined });
     }
   }, [route.params?.title]);
@@ -68,7 +79,13 @@ const Home = ({ route }: Props) => {
       {/* Todo container */}
       <View style={styles.todoWrapper}>
         {todos.map((aTodo) => (
-          <Todo key={aTodo.id} aTodo={aTodo} onPress={() => {}} />
+          <Todo
+            key={aTodo.id}
+            aTodo={aTodo}
+            onPress={() => {
+              setTodos(toggleTodo(todos, aTodo.id));
+            }}
+          />
         ))}
       </View>
 
