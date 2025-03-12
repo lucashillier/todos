@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import { fetchTodos } from 'api/api';
+import { getData, storeData } from 'api/api';
 import { COLORS } from 'assets/colors';
 import Todo from 'components/todo';
 import { RootStackParamList } from 'navigation/index';
@@ -27,17 +27,17 @@ const toggleTodo = (todos: TodoType[], id: number) => {
 const Home = ({ route }: Props) => {
   const [todos, setTodos] = useState<TodoType[]>([]);
 
-  // Get the todos from the API on load
+  // Get the todos on initial load
   useEffect(() => {
     const url = 'https://jsonplaceholder.typicode.com/todos?_limit=5';
-    fetchTodos(url)
-      .then((data: TodoType[]) => {
+    getData(url)
+      .then((data) => {
         setTodos(data);
 
         // Update the current todoID with the largest id
         todoID = Math.max(...data.map((aTodo) => aTodo.id));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   const navigation = useNavigation<homeScreenProp>();
@@ -54,9 +54,14 @@ const Home = ({ route }: Props) => {
         completed: false
       };
 
+      const updatedData = [...todos, newTodo];
+
       // Update the state and clear the param
-      setTodos([...todos, newTodo]);
+      setTodos(updatedData);
       navigation.setParams({ title: undefined });
+
+      // Update async storage
+      storeData(updatedData);
     }
   }, [route.params?.title]);
 
@@ -65,11 +70,25 @@ const Home = ({ route }: Props) => {
     const deleteID = route.params?.deleteID;
 
     if (deleteID) {
-      setTodos(todos.filter((aTodo) => aTodo.id !== deleteID));
+      // Remove the todo and clear the param
+      const updatedData = todos.filter((aTodo) => aTodo.id !== deleteID);
 
+      setTodos(updatedData);
       navigation.setParams({ deleteID: undefined });
+
+      // Update async storage
+      storeData(updatedData);
     }
   }, [route.params?.deleteID]);
+
+  const handleToggle = (id: number) => {
+    // Toggle the todo
+    const updatedData = toggleTodo(todos, id);
+
+    // Update state and async storage
+    setTodos(updatedData);
+    storeData(updatedData);
+  };
 
   return (
     // Wrapper
@@ -83,7 +102,7 @@ const Home = ({ route }: Props) => {
             key={aTodo.id}
             aTodo={aTodo}
             onPress={() => {
-              setTodos(toggleTodo(todos, aTodo.id));
+              handleToggle(aTodo.id);
             }}
           />
         ))}
@@ -95,7 +114,7 @@ const Home = ({ route }: Props) => {
           onPress={() => navigation.navigate('Delete', { todos })}
           title="Delete To-Do"
           color={COLORS.primary}
-          accessibilityLabel="Add To-Do"
+          accessibilityLabel="Delete To-Do"
         />
         <Button
           onPress={() => navigation.navigate('Add')}
