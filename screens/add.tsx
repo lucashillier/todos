@@ -34,11 +34,7 @@ const Add = () => {
           placeholderTextColor={COLORS.border}
         />
         <Button
-          onPress={() =>
-            navigation.popTo('Home', {
-              title: title
-            })
-          }
+          onPress={() => navigation.popTo('Home', { title })}
           disabled={title === ''}
           title="Add"
           color={COLORS.primary}

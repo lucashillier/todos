@@ -1,21 +1,30 @@
 import { COLORS } from 'assets/colors';
 import TodoType from 'types/Todo';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View
+} from 'react-native';
 
 type Props = {
   aTodo: TodoType;
+  onPress: (event: GestureResponderEvent) => void;
 };
 
 const Todo = (props: Props) => {
   return (
     // Wrapper
-    <View style={styles.container}>
-      {/* Checkmark */}
-      <TouchableOpacity style={styles.checkbox}></TouchableOpacity>
+    <TouchableHighlight style={styles.container} onPress={props.onPress}>
+      <View style={styles.container}>
+        {/* Checkmark */}
+        <View style={styles.checkbox}></View>
 
-      {/* Title */}
-      <Text style={styles.todoText}>{props.aTodo.title}</Text>
-    </View>
+        {/* Title */}
+        <Text style={styles.todoText}>{props.aTodo.title}</Text>
+      </View>
+    </TouchableHighlight>
   );
 };
 

@@ -1,80 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import { fetchTodos } from 'api/api';
 import { COLORS } from 'assets/colors';
 import Todo from 'components/todo';
 import { RootStackParamList } from 'navigation/index';
-import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import TodoType from 'types/Todo';
+import { StyleSheet, Text, View } from 'react-native';
 
-type Props = StackScreenProps<RootStackParamList, 'Home'>;
-type homeScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
-
-let todoID = 0;
+type Props = StackScreenProps<RootStackParamList, 'Delete'>;
+type deleteScreenProp = StackNavigationProp<RootStackParamList, 'Delete'>;
 
 const Delete = ({ route }: Props) => {
-  const [todos, setTodos] = useState<TodoType[]>([]);
-
-  // Get the todos from the API on load
-  useEffect(() => {
-    const url = 'https://jsonplaceholder.typicode.com/todos?_limit=5';
-    fetchTodos(url)
-      .then((data: TodoType[]) => {
-        setTodos(data);
-
-        // Update the current todoID with the largest id
-        todoID = Math.max(...data.map((aTodo) => aTodo.id));
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  const navigation = useNavigation<homeScreenProp>();
-
-  // Add a todo from params if present
-  useEffect(() => {
-    const title = route.params?.title;
-
-    if (title) {
-      const newTodo: TodoType = {
-        title: title,
-        userId: 0,
-        id: ++todoID,
-        completed: false
-      };
-
-      setTodos([...todos, newTodo]);
-
-      navigation.setParams({ title: undefined });
-    }
-  }, [route.params?.title]);
+  const navigation = useNavigation<deleteScreenProp>();
 
   return (
     // Wrapper
     <View style={styles.container}>
       {/* Title */}
-      <Text style={styles.title}>To-Do's</Text>
+      <Text style={styles.title}>Select a To-Do to Delete</Text>
       {/* Todo container */}
       <View style={styles.todoWrapper}>
-        {todos.map((aTodo) => (
-          <Todo key={aTodo.id} aTodo={aTodo} />
+        {route.params.todos.map((aTodo) => (
+          <Todo
+            key={aTodo.id}
+            aTodo={aTodo}
+            onPress={() => navigation.popTo('Home', { deleteID: aTodo.id })}
+          />
         ))}
-      </View>
-
-      {/* Button wrapper */}
-      <View style={styles.buttonWrapper}>
-        <Button
-          onPress={() => navigation.navigate('Add')}
-          title="Delete To-Do"
-          color={COLORS.primary}
-          accessibilityLabel="Add To-Do"
-        />
-        <Button
-          onPress={() => navigation.navigate('Add')}
-          title="New To-Do"
-          color={COLORS.primary}
-          accessibilityLabel="Add To-Do"
-        />
       </View>
     </View>
   );
@@ -99,12 +49,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold'
-  },
-  buttonWrapper: {
-    width: '100%',
-    alignItems: 'flex-end',
-    gap: 10,
-    marginBottom: 20
   }
 });
 
