@@ -17,7 +17,7 @@ let todoID = 0;
 const toggleTodo = (todos: TodoType[], id: number) => {
   return todos.map((aTodo) => {
     if (aTodo.id === id) {
-      aTodo.completed = !aTodo.completed;
+      return { ...aTodo, completed: !aTodo.completed };
     }
 
     return aTodo;
@@ -74,7 +74,6 @@ const Home = ({ route }: Props) => {
       const updatedData = todos.filter((aTodo) => aTodo.id !== deleteID);
 
       setTodos(updatedData);
-      navigation.setParams({ deleteID: undefined });
 
       // Update async storage
       storeData(updatedData);
